@@ -6,7 +6,7 @@ function love.load()
 	rand = 0
 	score_1 = 0
 	score_2 = 0
-	start = true
+	launch = true
 	love.graphics.setNewFont(30)	--Increase the font size
 
 	player_1 = {	--A table containg data about player 1
@@ -24,6 +24,7 @@ function love.load()
 		vy = 0
 	}
 
+	math.randomseed(os.time())	--This will set the random number generator algorithm A.K.A its SEED to the system time in seconds. Without this, the random number generator will most likely output the same sequence of numbers every time.
 	function rand_num(a, b)	--This function returns a random integer in the range of two other integers. It is used for making the ball bounce because I couldn't figure out how to make it bounce "realistically".
 		rand = math.random(a, b)
 		return rand
@@ -36,7 +37,7 @@ function love.load()
 		ball.vy = 0
 		ball.x = win_width/2
 		ball.y = win_height/2
-		start = true
+		launch = true
 	end
 end
 
@@ -52,10 +53,10 @@ function love.update(dt)
     elseif inrange(ball.x + 10, player_2.x, player_2.x + 25) and inrange(ball.y, player_2.y, player_2.y + 50) then	--Checks if the ball is colliding with player 2
         ball.vx = -(rand_num(4, 5))
         ball.x = ball.x - rand
-	elseif ball.y <= 0 then	--Checks if the ball is colliding with the left wall(Player 1's goal)
+	elseif ball.y <= 0 then	--Checks if the ball is colliding with the top wall
 		ball.vy = rand_num(4, 5)
 		ball.y = ball.y + rand
-	elseif ball.y >= win_height then	--Checks if the ball is colliding with the right wall(Player 2's goal)
+	elseif ball.y >= win_height then	--Checks if the ball is colliding with the bottom wall
 		ball.vy = -(rand_num(4, 5))
 		ball.y = ball.y - rand
     end
@@ -82,11 +83,11 @@ function love.update(dt)
 		player_2.y = player_2.y + player_speed
 	end
 	--Start Game
-	if start == true then
+	if launch == true then
 		if love.keyboard.isDown("space") then
 			ball.vx = -4
 			ball.vy = rand_num(-5, 5)
-			start = false
+			launch = false
 		end
 	end
 	
